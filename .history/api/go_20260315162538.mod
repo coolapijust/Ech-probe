@@ -1,3 +1,3 @@
 module api
 
-go 1.253
+go 1.23
