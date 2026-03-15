@@ -1,0 +1,11 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "hero-bg",
+      "description": "Abstract technological background representing encrypted data flow",
+      "imageUrl": "https://picsum.photos/seed/ech1/1200/400",
+      "imageHint": "network encryption"
+    }
+  ]
+}
