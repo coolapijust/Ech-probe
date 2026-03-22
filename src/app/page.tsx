@@ -5,9 +5,10 @@ import { DomainForm } from '@/components/ECHProbe/DomainForm';
 import { ResultsDisplay } from '@/components/ECHProbe/ResultsDisplay';
 import { performECHAnalysis, ResolverResult } from '@/app/actions/dns';
 import { performHRRAnalysis } from '@/app/actions/hrr';
-import { Shield, Fingerprint, Activity, Globe, Server, CheckCircle, Github } from 'lucide-react';
+import { Shield, Fingerprint, Activity, Globe, Server, CheckCircle, Github, BookOpen } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import Link from 'next/link';
 
 export default function Home() {
   const [results, setResults] = useState<ResolverResult[]>([]);
@@ -53,6 +54,13 @@ export default function Home() {
           <span className="font-bold text-lg">{t.title}</span>
           <div className="flex items-center gap-4">
             <span className="text-sm text-muted-foreground hidden sm:inline">{t.badge}</span>
+            <Link
+              href="/api-docs"
+              className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <BookOpen className="w-4 h-4" />
+              <span className="hidden sm:inline">API 文档</span>
+            </Link>
             <LanguageSwitcher />
           </div>
         </div>

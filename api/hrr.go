@@ -196,14 +196,25 @@ func parseECHConfigList(configList []byte, domain string) *ECHConfigDetail {
 		return nil
 	}
 
+	// listContent 是整个 ECHConfigList 的 payload，可能含多条 ECHConfig。
+	// 每条 ECHConfig 的格式为: version(2) + length(2) + ECHConfigContents
 	listContent := configList[2 : 2+totalLength]
+	rawHex := hex.EncodeToString(configList)
+
 	detail := parseECHConfig(listContent, domain)
 	if detail != nil {
-		detail.RawECHConfig = hex.EncodeToString(configList)
+		detail.RawECHConfig = rawHex
 	}
 	return detail
 }
 
+// parseECHConfig 从 ECHConfigList payload（已去掉外层 2字节 list_length）中
+// 解析第一条 ECHConfig，格式为:
+//   version(2) + length(2) + ECHConfigContents
+// ECHConfigContents:
+//   config_id(1) + kem_id(2) + public_key(u16+bytes)
+//   + cipher_suites(u16+entries) + maximum_name_length(1)
+//   + public_name(u8+bytes) + extensions(2)
 func parseECHConfig(config []byte, domain string) *ECHConfigDetail {
 	if len(config) < 10 {
 		return nil
@@ -211,15 +222,25 @@ func parseECHConfig(config []byte, domain string) *ECHConfigDetail {
 
 	offset := 0
 
+	// version (2 bytes)
 	version := int(config[offset])<<8 | int(config[offset+1])
 	offset += 2
 
+	// ECHConfig length (2 bytes) — 跳过，不消费内容
+	offset += 2
+
+	// config_id (1 byte)
 	configId := int(config[offset])
 	offset += 1
 
+	// kem_id (2 bytes)
 	kemId := int(config[offset])<<8 | int(config[offset+1])
 	offset += 2
 
+	// public_key: length(2) + bytes
+	if offset+2 > len(config) {
+		return nil
+	}
 	pubKeyLen := int(config[offset])<<8 | int(config[offset+1])
 	offset += 2
 
