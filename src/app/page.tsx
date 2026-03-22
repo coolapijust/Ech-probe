@@ -62,7 +62,7 @@ export default function Home() {
       <main className="flex-1 p-4 lg:p-6">
         {/* Content - Centered Layout */}
         <div className="max-w-4xl mx-auto">
-          {!isAnalyzing && results.length === 0 && (
+          {!isAnalyzing && results.length === 0 && !hrrResult ? (
             <div className="grid lg:grid-cols-12 gap-4 lg:gap-6">
               {/* Left Column - Form (7 columns) */}
               <div className="lg:col-span-7">
@@ -96,8 +96,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          )}
-          {(isAnalyzing || results.length > 0 || hrrResult) && (
+          ) : (
             <DomainForm 
               onAnalyze={handleAnalyze} 
               onHRRAnalyze={handleHRRAnalyze}

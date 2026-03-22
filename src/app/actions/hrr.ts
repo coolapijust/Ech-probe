@@ -19,7 +19,7 @@ export async function performHRRAnalysis(
     // 使用绝对路径调用 API
     const baseUrl = process.env.VERCEL_URL 
       ? `https://${process.env.VERCEL_URL}` 
-      : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+      : process.env.NEXT_PUBLIC_API_URL || `http://localhost:${process.env.PORT || 3000}`;
     
     const response = await fetch(`${baseUrl}/api/hrr`, {
       method: 'POST',
